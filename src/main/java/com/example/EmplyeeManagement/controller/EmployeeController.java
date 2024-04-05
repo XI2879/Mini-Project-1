@@ -2,13 +2,17 @@ package com.example.EmplyeeManagement.controller;
 
 import com.example.EmplyeeManagement.dto.EmployeeDto;
 import com.example.EmplyeeManagement.dto.EmployeeGetDto;
+import com.example.EmplyeeManagement.dto.EmployeeLoginRequestDto;
 import com.example.EmplyeeManagement.exception.AccessDeniedException;
+import com.example.EmplyeeManagement.security.JwtUtil;
 import com.example.EmplyeeManagement.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,23 @@ import java.util.List;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+
+    private AuthenticationManager authenticationManager;
+    private JwtUtil jwtUtil;
+
+    @PostMapping("login")
+    public ResponseEntity<String> login(@RequestBody EmployeeLoginRequestDto requestDto){
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                requestDto.getEmail(),
+                requestDto.getPassword()
+        );
+        authenticationManager.authenticate(token);
+        String jwt = jwtUtil.generate(requestDto.getEmail());
+        return ResponseEntity.ok(jwt);
+
+    }
+
+
 
     // Get all employees
     @PreAuthorize("hasAnyRole(\"ADMIN\",\"USER\")")

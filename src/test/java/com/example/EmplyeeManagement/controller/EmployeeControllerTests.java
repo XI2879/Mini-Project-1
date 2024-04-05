@@ -50,13 +50,13 @@ public class EmployeeControllerTests {
     @Test
     public void givenEmployeeObject_whenCreateEmployee_thenReturnSavedEmployee() throws Exception {
         // Mocking the behavior of SecurityContextHolder to return admin roles
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = UsernamePasswordAuthenticationToken.builder()
-                .principal("user")
-                .authorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
-                .build();
-        securityContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(securityContext);
+//        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+//        Authentication authentication = UsernamePasswordAuthenticationToken.builder()
+//                .principal("user")
+//                .authorities(Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")))
+//                .build();
+//        securityContext.setAuthentication(authentication);
+//        SecurityContextHolder.setContext(securityContext);
 
         given(employeeService.createEmployee(any(EmployeeDto.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
